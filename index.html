@@ -2,14 +2,14 @@
 <html>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Simple Webpage</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
+      overflow: visible;
       box-sizing: border-box;
     }
 
@@ -304,12 +304,9 @@
   </nav>
   <div class="container">
     <div class="left">
-
       <div class="image-container">
-
         <img src="https://i.ibb.co/nMrBtLm/Front-View-M4.png" alt="" class="image">
         <div class="referencebox">
-
           <div class="wheelbox left-wheelbox">
             <div class="wheel left-wheel"></div>
           </div>
@@ -319,7 +316,6 @@
           <div class="shadow--inset rightbox">-5.00°</div>
           <div class="shadow--inset leftbox">-5.00°</div>
         </div>
-
         </img>
       </div>
     </div>
@@ -333,7 +329,8 @@
           <div class="wheelbox right-wheelbox">
             <div class="wheel right-wheel"></div>
           </div>
-
+          <div class="shadow--inset rightbox">-5.00°</div>
+          <div class="shadow--inset leftbox">-5.00°</div>
         </div>
         </img>
       </div>
@@ -356,18 +353,7 @@
         dropdown.classList.remove("show");
         overlay.classList.remove("show");
       });
-      if (screen.width <= 980) {
-        document.getElementsByTagName("body")[0].style.paddingTop = "0px";
-        document.getElementsByTagName("body")[0].style.height = "100vh";
-      }
-      function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen(); 
-        }
-      }
-    }
     </script>
 </body>
+
+</html>
