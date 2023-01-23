@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Simple Webpage</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+
+    /* Navbar styling */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    .app-name {
+      text-align: center;
+      font-family: system-ui;
+      font-variant-caps: petite-caps;
+      font-weight: lighter;
+      font-size: 2em;
+    }
+
+    /* Burger button styling */
+    .burger {
+      position: absolute;
+      left: 0;
+      cursor: pointer;
+      padding-left: 1em;
+      font-size: 2rem;
+    }
+
+    /* Dropdown box styling */
+    .dropdown {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 14em;
+      background-color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      display: none;
+      /* Hide dropdown box by default */
+      z-index: 2;
+      overflow: scroll;
+      border-right: white, 1px;
+    }
+
+    /* Content inside the dropdown box */
+    .dropdown .content {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      background-color: #f9f9f9;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Show dropdown box */
+    .dropdown.show {
+      display: flex;
+    }
+
+    /* Darken the rest of the page when the dropdown box is active */
+    .dropdown.show~* {
+      filter: brightness(80%);
+    }
+
+    button {
+      border: none;
+      padding: 1em;
+      background-color: transparent;
+      text-align: left;
+      font-family: system-ui;
+      font-weight: 500;
+      font-size: 1em;
+      color: #e6e6e6;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .icon {
+      width: 2em;
+      padding-right: 0.5em;
+    }
+
+    button:hover {
+      background-color: #fff;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .show+.overlay {
+      display: block;
+    }
+
+    /* Main body container styling */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .left,
+    .right {
+      height: calc(100vh - 80px);
+      /* 100vh is the full height of the viewport, 50px is the height of the navbar */
+      display: flex;
+      align-items: center;
+    }
+
+    .image-container {
+      padding: 10%;
+    }
+
+    img {
+      width: 100%;
+      max-width: your-image-width;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Left container styling */
+    .container .left {
+      flex: 1;
+      background-color: #f1f1f1;
+    }
+
+    /* Right container styling */
+    .container .right {
+      flex: 1;
+      background-color: #f1f1f1;
+    }
+
+    /* Media query for small screens */
+    @media screen and (max-width: 600px) {
+
+      /* Make containers stack on top of each other on small screens */
+      .container {
+        flex-direction: column;
+        height: calc(100vh - 80px);
+      }
+    }
+
+    /* Style the scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 100%;
+    }
+
+    /* Style the thumb (the part of the scrollbar that you drag) */
+    ::-webkit-scrollbar-thumb {
+      background: #999;
+      border-radius: 10px;
+    }
+
+    .image-container {
+      position: relative;
+    }
+
+    .image {
+      filter: drop-shadow(5px 5px 5px #333);
+    }
+
+    .referencebox {
+      position: absolute;
+      width: 79%;
+      height: 100%;
+      top: 0;
+      left: 10%;
+      border-right: 2px solid crimson;
+      border-left: 2px solid crimson;
+      box-shadow: 0 0px 5px crimson;
+      clip-path: inset(1px -15px 1px -15px);
+      opacity: 0.8;
+    }
+
+    .wheel {
+      background-color: black;
+      position: absolute;
+      border-radius: 12%;
+      z-index: 2;
+    }
+
+    .left-wheel {
+      top: 50%;
+      left: 0;
+      width: 18%;
+      height: 40%;
+    }
+
+    .right-wheel {
+      top: 50%;
+      right: 0;
+      width: 18%;
+      height: 40%;
+    }
+
+    .wheelbox {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      opacity: 0.8;
+    }
+
+    .right-wheelbox {
+      border-right: 2px solid green;
+      transform: rotate(-5deg);
+      transform-origin: 80% 70%;
+      box-shadow: 0 0 5px green;
+      clip-path: inset(1px -15px 1px 1px);
+    }
+
+    .left-wheelbox {
+      border-left: 2px solid green;
+      transform: rotate(5deg);
+      transform-origin: 20% 70%;
+      box-shadow: 0 0 5px green;
+      clip-path: inset(1px 1px 1px -15px);
+    }
+
+    .shadow--inset {
+      box-shadow: inset 0.2rem 0.2rem 0.5rem rgba(195, 193, 198, 0.9), inset -0.2rem -0.2rem 0.5rem #fff, 0.3rem 0.3rem 0.5rem rgba(195, 193, 198, 0.9), -0.2rem -0.2rem 0.4rem #fff;
+      padding: 1%;
+      border-radius: 2vw;
+      background: lightgrey;
+      font-family: system-ui;
+      font-weight: 500;
+      font-size: 2em;
+      width: 36%;
+      color: black;
+      position: absolute;
+      text-align: center;
+      //top: -20%;
+    }
+
+    .leftbox {
+      left: 10%;
+    }
+
+    .rightbox {
+      right: 10%;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="burger" id="burger-btn">☰</div>
+    <div class="app-name">Trackside Aligner</div>
+    <div class="dropdown" id="dropdown-box">
+      <div class="dropdown_header">menu</div>
+      <button>
+        <img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
+        Camber
+      </button>
+      <button>
+        <img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
+        Caster
+      </button>
+      <button>
+        <img src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
+        Toe
+      </button>
+      <button>
+        <img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
+        Dimensions
+      </button>
+      <button>
+        <img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
+        Protocol
+      </button>
+      <button>
+        <img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
+        Settings
+      </button>
+    </div>
+    <div class="overlay" id="overlay"></div>
+  </nav>
+  <div class="container">
+    <div class="left">
+
+      <div class="image-container">
+
+        <img src="https://i.ibb.co/nMrBtLm/Front-View-M4.png" alt="" class="image">
+        <div class="referencebox">
+
+          <div class="wheelbox left-wheelbox">
+            <div class="wheel left-wheel"></div>
+          </div>
+          <div class="wheelbox right-wheelbox">
+            <div class="wheel right-wheel"></div>
+          </div>
+          <div class="shadow--inset rightbox">-5.00°</div>
+          <div class="shadow--inset leftbox">-5.00°</div>
+        </div>
+
+        </img>
+      </div>
+    </div>
+    <div class="right">
+      <div class="image-container">
+        <img src="https://i.ibb.co/cwhJmJ2/Rear-View-M4.png" alt="" class="image">
+        <div class="referencebox">
+          <div class="wheelbox left-wheelbox">
+            <div class="wheel left-wheel"></div>
+          </div>
+          <div class="wheelbox right-wheelbox">
+            <div class="wheel right-wheel"></div>
+          </div>
+
+        </div>
+        </img>
+      </div>
+    </div>
+
+    <script>
+      // Get the burger button
+      const burger = document.getElementById("burger-btn");
+      // Get the dropdown box
+      const dropdown = document.getElementById("dropdown-box");
+      // Get the overlay
+      const overlay = document.getElementById("overlay");
+      // Add event listener to burger button to toggle dropdown box when clicked
+      burger.addEventListener("click", function() {
+        dropdown.classList.toggle("show");
+        overlay.classList.toggle("show");
+      });
+      // Add event listener to the overlay to close the dropdown box when clicked
+      overlay.addEventListener("click", function() {
+        dropdown.classList.remove("show");
+        overlay.classList.remove("show");
+      });
+      if (screen.width <= 980) {
+        document.getElementsByTagName("body")[0].style.paddingTop = "0px";
+        document.getElementsByTagName("body")[0].style.height = "100vh";
+      }
+      window.addEventListener("load", function() {
+        setTimeout(function() {
+          window.scrollTo(0, 1);
+        }, 0);
+      });
+    </script>
+</body>
