@@ -360,10 +360,14 @@
         document.getElementsByTagName("body")[0].style.paddingTop = "0px";
         document.getElementsByTagName("body")[0].style.height = "100vh";
       }
-      window.addEventListener("load", function() {
-        setTimeout(function() {
-          window.scrollTo(0, 1);
-        }, 0);
-      });
+      function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen(); 
+        }
+      }
+    }
     </script>
 </body>
