@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+
+  <title>Trackside Aligner</title>
+  <style>
+    #container {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 3em 3em 1fr 3em 3em;
+    }
+
+    #div1 {
+      grid-column: 2 / 4;
+      grid-row: 1;
+    }
+
+    #div2 {
+      grid-column: 1/3;
+      grid-row: 2;
+    }
+
+    #div3 {
+      grid-column: 3/5;
+      grid-row: 2;
+    }
+
+    #center-container {
+      grid-column: 1 / 5;
+      grid-row: 3;
+      position: relative;
+      margin: 0.2em;
+    }
+
+    #image {
+      z-index: 4;
+    }
+
+    #div4 {
+      grid-column: 1/3;
+      grid-row: 4;
+    }
+
+    #div5 {
+      grid-column: 3/5;
+      grid-row: 4;
+    }
+
+    #div6 {
+      grid-column: 2/ 4;
+      grid-row: 5;
+    }
+
+    @media (min-aspect-ratio: 1/1) {
+      body {
+        background-color: black;
+      }
+
+      #container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 3em repeat(2, 1fr) 3em;
+      }
+
+      #div1 {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+      }
+
+      #div2 {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: center;
+      }
+
+      #div3 {
+        grid-column: 3;
+        grid-row: 2;
+        align-self: center;
+      }
+
+      #center-container {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+
+      #image-container {}
+
+      #image {}
+
+      #div4 {
+        grid-column: 1;
+        grid-row: 3;
+        align-self: center;
+      }
+
+      #div5 {
+        grid-column: 3;
+        grid-row: 3;
+        align-self: center;
+      }
+
+      #div6 {
+        grid-column: 2;
+        grid-row: 4;
+        align-self: start;
+      }
+    }
+
+    .thrust-line {
+      position: absolute;
+      left: 50%;
+      bottom: 22%;
+      width: 0;
+      height: 75%;
+      border-right: 3px solid green;
+      box-shadow: 0 0px 5px green;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 6;
+      transform-origin: bottom right;
+      transform: rotate(-2deg);
+    }
+
+    .longitudal-line {
+      position: absolute;
+      left: 50%;
+      bottom: 22%;
+      width: 0;
+      height: 75%;
+      border-right: 3px solid crimson;
+      box-shadow: 0 0px 5px crimson;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 5;
+    }
+
+    .wheel {
+      position: absolute;
+      transform-origin: center 7%;
+      height: 65%;
+      z-index: 0;
+      filter: drop-shadow(1px 1px 1px #0d2120);
+    }
+
+    .front {
+      top: 11%;
+    }
+
+    .rear {
+      top: 75%;
+    }
+
+    .left {
+      left: -31%;
+    }
+
+    .right {
+      right: -31%;
+    }
+
+    .front.left {
+      transform: rotate(-0.5deg);
+    }
+
+    .rear.left {
+      transform: scaleY(-1) rotate(3deg);
+    }
+
+    .rear.right {
+      transform: scaleY(-1) scaleX(-1) rotate(-2deg);
+    }
+
+    .front.right {
+      transform: rotate(-0.5deg) scaleX(-1);
+    }
+
+    .above {
+      z-index: 3;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<div class="parent">
+
+  <body>
+    <nav class="navbar">
+      <div class="burger" id="burger-btn">☰</div>
+      <div class="app-name">Trackside Aligner</div>
+      <div class="dropdown" id="dropdown-box">
+        <div class="dropdown_header">Trackside Aligner</div>
+        <button>
+          <img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
+          Camber
+        </button>
+        <button>
+          <img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
+          Caster / KPI
+        </button>
+        <button>
+          <img id="active" src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
+          Toe
+        </button>
+        <button>
+          <img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
+          Dimensions
+        </button>
+        <button>
+          <img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
+          Protocol
+        </button>
+        <button>
+          <img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
+          Settings
+        </button>
+      </div>
+      <div class="overlay" id="overlay"></div>
+    </nav>
+    <div id="container">
+      <div id="div1" class="div" class="boxes">-0°34'</div>
+      <div id="div2" class="div" class="boxes">-0°17'</div>
+      <div id="div3" class="div" class="boxes">-0°17'</div>
+      <div id="div4" class="div" class="boxes">0°15'</div>
+      <div id="div5" class="div" class="boxes">0°15'</div>
+      <div id="div6" class="div" class="boxes">0°30'</div>
+      <div id="center-container">
+        <div id="image-container">
+          <img id="image" src="https://i.ibb.co/KhYbrb4/Top-View-M4.png" alt="Top-View-M4" border="0">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="front left wheel">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="front left wheel above">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="rear left wheel">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="rear left wheel above">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="front right wheel">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="front right wheel above">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="rear right wheel">
+          <img src="https://i.ibb.co/5Lt1brL/Wheel-toe-1.png" alt="Wheel-toe-1" border="0" class="rear right wheel above">
+          <div class="thrust-line">
+          </div>
+          <div class="longitudal-line">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    
+    <script src="script.js"></script>
+    
+    <script>
+      const centerContainer = document.querySelector("#center-container");
+      const imageContainer = document.querySelector("#image-container");
+      const aspectRatio = 500 / 1221;
+
+      function setImageContainerDimensions() {
+        const parentWidth = centerContainer.offsetWidth;
+        const parentHeight = centerContainer.offsetHeight;
+        let childWidth = parentWidth;
+        let childHeight = childWidth / aspectRatio;
+        if (childHeight > parentHeight) {
+          childHeight = parentHeight;
+          childWidth = childHeight * aspectRatio;
+        }
+        imageContainer.style.width = childWidth + "px";
+        imageContainer.style.height = childHeight + "px";
+      }
+      setImageContainerDimensions();
+      window.addEventListener("resize", setImageContainerDimensions);
+    </script>
+  </body>
+</div>
+
+</html>
