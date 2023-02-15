@@ -162,7 +162,7 @@ body {
 			padding-bottom: 2.5vh;
 			max-width:200vh;
 			margin: 0 auto;
-			background-color: #e5eaeb;
+			background-color: black;
 		}
 
 		.div {
@@ -200,10 +200,6 @@ body {
 			filter: drop-shadow(2px 2px 2px #0d2120);
 		}
 
-		 @media (min-aspect-ratio: 1/1) {
-      			body {
-        			background-color: black;
-      			}
-		}
+	
 
 		
