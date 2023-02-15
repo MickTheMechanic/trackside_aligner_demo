@@ -1,87 +1,95 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Trackside Aligner</title>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			background-color:#333;
+  <title>Trackside Aligner</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #333;
       font-family: system-ui;
-		}
+    }
 
-		.center {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			height: 100vh;
-			text-align: center;
-		}
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      text-align: center;
+    }
 
-		h1 {
+    h1 {
       font-variant-caps: petite-caps;
       font-weight: 400;
       font-size: 4em;
-      margin-bottom:2.5em;
+      margin-bottom: 2.5em;
       filter: drop-shadow(2px 2px 2px black);
       color: #e5eaeb;
       font-style: italic;
-		}
+    }
 
-		#button {
-			display: flex;
+    #button {
+      display: flex;
       justify-content: center;
-      align-items: center; 
-			font-size: 2rem;
-			color: white;
-			height:100%;
-      width:100%;
-      position:absolute;
-			text-decoration: none;
+      align-items: center;
+      font-size: 2rem;
+      color: white;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      text-decoration: none;
       content: "Click to continue";
       filter: drop-shadow(2px 2px 2px #0d2120);
-        opacity:0.05;
-			animation: pulse 2s ease-in-out infinite; 
-		}
+      opacity: 0.05;
+      animation: pulse 2s ease-in-out infinite;
+    }
 
-		@keyframes pulse {
-			0% {
-				opacity: 1;
-			}
-			50% {
-				opacity: 0.2;
-			}
-			100% {
-				opacity: 1;
-			}
-		}
-     #button:before {
-          content: "Click to continue";
-        }
-		@media (pointer: coarse) {
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.2;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    #button:before {
+      content: "Click to continue";
+    }
+
+    @media (pointer: coarse) {
       #button:before {
-          display: none;
-        }
-			 #button:after {
-          content: "Tap to continue";
-        }
-      
-		}
-      #image {
+        display: none;
+      }
+
+      #button:after {
+        content: "Tap to continue";
+      }
+    }
+
+    #image {
       position: absolute;
       height: 100%;
       z-index: -1;
       filter: drop-shadow(2px 2px 2px #0d2120);
-        opacity:0.05;
+      opacity: 0.05;
     }
-	</style>
+  </style>
 </head>
+
 <body>
-	<div class="center">
+  <div class="center">
     <img id="image" src="https://i.ibb.co/KhYbrb4/Top-View-M4.png" alt="Top-View-M4" border="0">
-		<h1>Trackside Aligner</h1>
-		<a id="button" href="#"></a>
-	</div>
+    <h1>Trackside Aligner</h1>
+    <a id="button" href="#"></a>
+  </div>
 </body>
+
 </html>
