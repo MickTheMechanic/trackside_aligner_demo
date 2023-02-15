@@ -179,6 +179,7 @@ body {
 			max-width: 8em;
 			display: block;
 			margin: 0 auto;
+			align-self: center;
 		}
 
 		.image-container {
