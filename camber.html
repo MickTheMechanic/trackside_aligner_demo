@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+
+	<title>Trackside Aligner</title>
+	<style>
+		
+		.container {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: 0.5fr 1fr 0.5fr 1fr;
+		}
+
+		#div1 {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		#div2 {
+			grid-column: 2;
+			grid-row: 1;
+		}
+
+		#div3 {
+			grid-column: 1/3;
+			grid-row: 2;
+			position: relative;
+			margin: 0.2em;
+		}
+
+		#div4 {
+			grid-column: 1;
+			grid-row: 3;
+		}
+
+		#div5 {
+			grid-column: 2;
+			grid-row: 3;
+		}
+
+		#div6 {
+			grid-column: 1/3;
+			grid-row: 4;
+			position: relative;
+			margin: 0.2em;
+		}
+
+		@media (min-aspect-ratio: 1/1) {
+			.container {
+				grid-template-columns: repeat(4, 1fr);
+				grid-template-rows: 0.5fr 1fr;
+			}
+
+			#div1 {
+				grid-column: 1;
+				grid-row: 1;
+			}
+
+			#div2 {
+				grid-column: 2;
+				grid-row: 1;
+			}
+
+			#div3 {
+				grid-column: 1/3;
+				grid-row: 2;
+			}
+
+			#div4 {
+				grid-column: 3;
+				grid-row: 1;
+			}
+
+			#div5 {
+				grid-column: 4;
+				grid-row: 1;
+			}
+
+			#div6 {
+				grid-column: 3/5;
+				grid-row: 2;
+			}
+		}
+
+		.vertical-lines {
+			position: absolute;
+			width: 89%;
+			height: 100%;
+			left: 5%;
+			top: 0;
+			border-right: 3px solid crimson;
+			border-left: 3px solid crimson;
+			box-shadow: 0 0px 5px crimson;
+			clip-path: inset(1px -15px 1px -15px);
+			z-index: 1;
+		}
+
+		.left-wheel,
+		.right-wheel {
+			position: absolute;
+			width: 18%;
+			height: 45%;
+			background: black;
+			bottom: 0;
+			border-radius: 10%;
+		}
+
+		.left-wheel,
+		.left-line {
+			left: 5%;
+			transform: rotate(3deg);
+		}
+
+		.right-wheel,
+		.right-line {
+			right: 5%;
+			transform: rotate(-5deg);
+		}
+
+		.left-line,
+		.right-line {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			transform-origin: 0% 70%;
+		}
+
+		.left-line {
+			left: 5%;
+			border-left: 3px solid green;
+			box-shadow: 0 0px 5px green;
+			clip-path: inset(1px -15px 1px -15px);
+			z-index: 2;
+		}
+
+		.right-line {
+			right: 5%;
+			border-right: 3px solid green;
+			box-shadow: 0 0px 5px green;
+			clip-path: inset(1px -15px 1px -15px);
+			z-index: 2;
+		}
+
+		.above {
+			z-index: 1;
+			opacity: 0;
+		}
+	</style>
+</head>
+
+<body class="example">
+	<nav class="navbar">
+		<div class="burger" id="burger-btn">☰</div>
+		<div class="app-name">Trackside Aligner</div>
+		<div class="dropdown" id="dropdown-box">
+			<div class="dropdown_header">Trackside Aligner</div>
+			<a id="active">
+				<img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
+				Camber
+			</a>
+			<a href="/caster_kpi.html">
+				<img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
+				Caster / KPI
+			</a>
+			<a href="/toe.html">
+				<img src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
+				Toe
+			</a>
+			<a>
+				<img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
+				Dimensions
+			</a>
+			<a>
+				<img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
+				Protocol
+			</a>
+			<a>
+				<img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
+				Settings
+			</a>
+		</div>
+		<div class="overlay" id="overlay"></div>
+	</nav>
+	<div class="container">
+		<div id="div1" class="div rightbox">-5.00°</div>
+		<div id="div2" class="div leftbox">-5.00°</div>
+		<div id="div3" class="left-container">
+			<div class="image-container">
+				<img class="image" src="https://i.ibb.co/bFvSJHm/Front-1.png" alt="Front-1" border="0">
+				<div class="left-line left-angles"></div>
+				<div class="right-line right-angles"></div>
+				<div class="vertical-lines"></div>
+				<div class="left-wheel below left-angles"></div>
+				<div class="right-wheel below right-angles"></div>
+				<div class="left-wheel above left-angles"></div>
+				<div class="right-wheel above right-angles"></div>
+			</div>
+		</div>
+		<div id="div4" class="div rightbox">-5.00°</div>
+		<div id="div5" class="div leftbox">-5.00°</div>
+		<div id="div6" class="right-container">
+			<div class="image-container">
+				<img class="image" src="https://i.ibb.co/YpPLykC/Rear-1.png" alt="Rear-1" border="0">
+				<div class="left-line left-angles"></div>
+				<div class="right-line right-angles"></div>
+				<div class="vertical-lines"></div>
+				<div class="left-wheel below left-angles"></div>
+				<div class="right-wheel below right-angles"></div>
+				<div class="left-wheel above left-angles"></div>
+				<div class="right-wheel above right-angles"></div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script>
+		// Get the burger button
+		const burger = document.getElementById("burger-btn");
+		// Get the dropdown box
+		const dropdown = document.getElementById("dropdown-box");
+		// Get the overlay
+		const overlay = document.getElementById("overlay");
+		// Add event listener to burger button to toggle dropdown box when clicked
+		burger.addEventListener("click", function() {
+			dropdown.classList.toggle("show");
+			overlay.classList.toggle("show");
+		});
+		// Add event listener to the overlay to close the dropdown box when clicked
+		overlay.addEventListener("click", function() {
+			dropdown.classList.remove("show");
+			overlay.classList.remove("show");
+		});
+		var scrollTop = 0;
+		setInterval(function() {
+			document.body.scrollTop = scrollTop;
+			scrollTop++;
+		}, 100);
+		const centerContainer = document.querySelector("#div3");
+		const imageContainer = document.querySelectorAll(".image-container");
+		const aspectRatio = 1449 / 1000;
+
+		function setImageContainerDimensions() {
+			const parentWidth = centerContainer.offsetWidth;
+			const parentHeight = centerContainer.offsetHeight;
+			let childWidth = parentWidth;
+			let childHeight = childWidth / aspectRatio;
+			if (childHeight > parentHeight) {
+				childHeight = parentHeight;
+				childWidth = childHeight * aspectRatio;
+			}
+			imageContainer[0].style.width = childWidth + "px";
+			imageContainer[0].style.height = childHeight + "px";
+			imageContainer[1].style.width = childWidth + "px";
+			imageContainer[1].style.height = childHeight + "px";
+		}
+		setImageContainerDimensions();
+		window.addEventListener("resize", setImageContainerDimensions);
+		window.addEventListener("load", function() {
+  const dropdown = document.getElementById("dropdown-box");
+  const overlay = document.getElementById("overlay");
+  dropdown.classList.add("show");
+  overlay.classList.add("show");
+});
+	</script>
+</body>
+
+</html>
