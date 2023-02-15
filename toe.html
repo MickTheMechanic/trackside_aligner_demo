@@ -32,7 +32,7 @@
       margin: 0.2em;
     }
 
-    #image {
+    .image {
       z-index: 4;
     }
 
@@ -80,10 +80,6 @@
         grid-column: 2;
         grid-row: 2/4;
       }
-
-      #image-container {}
-
-      #image {}
 
       #div4 {
         grid-column: 1;
@@ -239,7 +235,7 @@
     
     <script>
       const centerContainer = document.querySelector("#center-container");
-      const imageContainer = document.querySelector("#image-container");
+      const imageContainer = document.querySelector(".image-container");
       const aspectRatio = 500 / 1221;
 
       function setImageContainerDimensions() {
