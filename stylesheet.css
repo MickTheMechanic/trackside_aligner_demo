@@ -3,6 +3,7 @@ body {
   padding: env(safe-area-inset);
   background-color: #333;
   z-index: -99;
+  position:relative;
 }
 @media (max-height: 600px) {
   body {
