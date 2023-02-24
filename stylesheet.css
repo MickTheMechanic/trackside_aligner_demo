@@ -131,7 +131,7 @@ a:active {
 
 a:hover,
 #active {
-  background-color: dimgrey;
+  background-color: #007aff;
   color: Gainsboro;
   cursor: pointer;
 }
