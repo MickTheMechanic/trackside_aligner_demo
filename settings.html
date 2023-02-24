@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" href="\trackside_aligner_demo\stylesheet.css">
+  <title>Trackside Aligner</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    form {
+      padding: 20px;
+      margin: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-width: 50em;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% - 20px), -50%);
+      background-color: white;
+    }
+
+    .field-group {
+      margin: 10px;
+    }
+
+    .field-group input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      max-width: 6em;
+      font-size: 16px;
+    }
+
+    .field-group h2 {
+      margin: 0;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .field-group label {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .btn {
+      background-color: #007aff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      box-sizing: border-box;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%, 10%);
+    }
+
+    button {
+      width: 100%;
+      max-width: 6em;
+    }
+
+    .info {
+      background: none;
+      border: none;
+      color: #007aff;
+      font-weight: 500;
+      font-size: unset;
+      margin-left: -0.3em;
+      cursor: pointer;
+      width: 1em;
+    }
+
+    .popup-header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 9px;
+      border-top-right-radius: 9px;
+    }
+
+    .popup-header h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -75%);
+      background-color: white;
+      border: 1px solid black;
+      border-radius: 10px;
+      z-index: 99;
+      max-width: 30em;
+      width: 400px;
+    }
+
+    .popup-body {
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .popup-body button {
+      background-color: #007aff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-top: 20px;
+      display: block;
+      margin: 20px auto 0;
+    }
+
+    .popup-body button:hover {
+      background-color: #0050a4;
+      cursor: pointer;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 17px;
+      margin-top: 5px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 17px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #007aff;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #007aff;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(13px);
+      transform: translateX(13px);
+    }
+
+    /* Add custom CSS styles for improved user experience on mobile devices */
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 26px;
+        padding: 15px;
+      }
+
+      form {
+        margin: 10px;
+        padding: 10px;
+        transform: translate(calc(-50% - 10px), -50%);
+      }
+
+      .field-group input[type="number"] {
+        padding: 8px;
+      }
+
+      .field-group h2 {
+        font-size: 14px;
+      }
+
+      .field-group label {
+        font-size: 14px;
+      }
+
+      .popup-header h3 {
+        font-size: 18px;
+      }
+
+      .popup-body button {
+        font-size: 14px;
+        padding: 8px 16px;
+        margin-top: 15px;
+      }
+
+      .popup {
+        max-width: 90%
+      }
+    }
+
+    @media (max-height: 600px) {
+      form {
+        margin-top: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr 3em;
+      }
+
+      #form-section-1 {
+        position: relative;
+        display: block;
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #form-section-2 {
+        position: relative;
+        display: block;
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      #save {
+        grid-column: 1/3;
+        grid-row: 2;
+        text-align: none;
+      }
+
+      .popup {
+        transform: translate(-50%, -65%);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="burger" id="burger-btn">☰</div>
+    <div class="app-name">Trackside Aligner</div>
+    <div class="dropdown" id="dropdown-box">
+      <div class="dropdown_header">Trackside Aligner</div>
+      <a>
+        <img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
+        Camber
+      </a>
+      <a href="/trackside_aligner_demo/caster_kpi.html">
+        <img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
+        Caster / KPI
+      </a>
+      <a href="/trackside_aligner_demo/toe.html">
+        <img src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
+        Toe
+      </a>
+      <a>
+        <img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
+        Dimensions
+      </a>
+      <a>
+        <img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
+        Protocol
+      </a>
+      <a id="active">
+        <img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
+        Settings
+      </a>
+    </div>
+    <div class="overlay" id="overlay"></div>
+  </nav>
+
+  <div class="container">
+    <form>
+      <div id="form-section-1">
+        <div class="field-group">
+          <h2>Camber Units</h2>
+          <label><input type="radio" name="camber-units" value="decimal" checked> Decimal</label>
+          <label><input type="radio" name="camber-units" value="degrees-minutes"> Degrees/Minutes</label>
+        </div>
+        <div class="field-group">
+          <h2>Toe Units</h2>
+          <label><input type="radio" name="toe-units" value="decimal" checked> Decimal</label>
+          <label><input type="radio" name="toe-units" value="degrees-minutes"> Degrees/Minutes</label><br>
+          <label><input type="radio" name="toe-units" value="millimeters"> Millimeters</label>
+        </div>
+
+        <div class="field-group">
+          <h2>Automatic Wheelbase Detection</h2>
+          <label class="switch">
+            <input type="checkbox" id="auto-detect-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <div id="form-section-2">
+
+        <div class="field-group">
+          <h2>Manual Wheelbase Input <button type="button" id="info-btn" class="info">ⓘ</button></h2>
+          <input type="number" name="manual-wheelbase-input" id="manual-input" disabled> mm</input>
+        </div>
+        <div class="field-group">
+          <h2>Wheel Diameter <button type="button" id="diameter-info-btn" class="info">ⓘ</button></h2>
+          <input type="number" name="wheel-diameter" id="wheel-diameter" disabled> Inches</input>
+        </div>
+      </div>
+      <div id="save" class="field-group">
+        <button type="submit" class="btn">Save</button>
+      </div>
+
+    </form>
+  </div>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Information</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="popup-body">
+        <p>Entering the wheelbase manually may improve accuracy in some situations. Enter the wheelbase in mm.<br>(Automatic wheelbase detection must be disabled)</p>
+        <button class="close">OK</button>
+      </div>
+    </div>
+
+  </div>
+  <div id="diameter-popup" class="popup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Information</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="popup-body">
+        <p>When using mm as toe units, the wheel (rim) diameter must be entered manually. Enter wheel diameter in inches.</p>
+        <button class="close">OK</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://kit.fontawesome.com/43a6d3fc6d.js" crossorigin="anonymous"></script>
+  <script>
+    // Add your JavaScript code here
+    const toeUnits = document.querySelectorAll('input[name="toe-units"]');
+    const wheelDiameterInput = document.getElementById('wheel-diameter');
+    const infoBtn = document.getElementById('info-btn');
+    const diameterInfoBtn = document.getElementById('diameter-info-btn');
+    const popup = document.getElementById('popup');
+    const diameterPopup = document.getElementById('diameter-popup');
+    const closeBtns = document.getElementsByClassName('close');
+    const manualInput = document.getElementById('manual-input');
+    const autoDetectToggle = document.getElementById('auto-detect-toggle');
+    // Event listener for toe unit change
+    toeUnits.forEach(function(toeUnit) {
+      toeUnit.addEventListener('change', function() {
+        if (toeUnit.value === 'millimeters') {
+          wheelDiameterInput.removeAttribute('disabled');
+        } else {
+          wheelDiameterInput.setAttribute('disabled', '');
+        }
+      });
+    });
+    // Event listener for info button
+    infoBtn.addEventListener('click', function() {
+      popup.style.display = 'block';
+    });
+    // Event listener for diameter info button
+    diameterInfoBtn.addEventListener('click', function() {
+      diameterPopup.style.display = 'block';
+    });
+    // Event listener for close buttons
+    for (let i = 0; i < closeBtns.length; i++) {
+      closeBtns[i].addEventListener('click', function() {
+        popup.style.display = 'none';
+        diameterPopup.style.display = 'none';
+      });
+      closeBtns[i].addEventListener('mouseover', function() {
+        this.style.cursor = 'pointer'; // change cursor on hover
+      });
+    }
+    // Event listener for automatic wheelbase detection toggle
+    autoDetectToggle.addEventListener('change', function() {
+      if (this.checked) {
+        manualInput.setAttribute('disabled', '');
+      } else {
+        manualInput.removeAttribute('disabled');
+      }
+    });
+    // Event listener for hiding keyboard on touch devices
+    document.addEventListener('touchstart', function(e) {
+      if (!e.target.matches('input')) {
+        document.activeElement.blur();
+      }
+    });
+  </script>
+</body>
+
+</html>
