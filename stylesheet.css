@@ -166,7 +166,7 @@ a:hover,
 .container {
   display: grid;
   grid-gap: 10px;
-  height: calc(95vh - 61px);
+  height: calc(95vh - 60px);
   padding-top: 2.5vh;
   padding-bottom: 2.5vh;
   margin: 0 auto;
