@@ -167,7 +167,8 @@ a:hover,
   display: grid;
   grid-gap: 10px;
   height: calc(95vh - 59px);
-  padding:20px;
+  padding-top: 2.5vh;
+  padding-bottom: 2.5vh;
   margin: 0 auto;
   background-color: #e5eaeb;
   position: relative;
