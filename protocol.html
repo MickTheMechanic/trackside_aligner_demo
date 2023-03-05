@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" href="\trackside_aligner_demo\stylesheet.css">
+  <title>Trackside Aligner</title>
+  <style>
+    body {
+      font-family: system-ui
+    }
+
+    #header {
+      font-variant-caps: petite-caps;
+      font-weight: 500;
+      font-size: 2em;
+      color: #007aff;
+      font-style: italic;
+      text-align: center;
+      display: none;
+      top: 0;
+      position: relative;
+      margin-top: -2em;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .print {
+      background-color: #007aff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      box-sizing: border-box;
+      width: 6em;
+      height: 3em;
+    }
+
+    .print-buttons-container {
+      position: relative;
+      display: flex;
+      justify-content: space-evenly;
+      max-width: 100vh;
+      transform: translate(-50%, 0%);
+      left: 50%;
+      margin-bottom: 0.5em;
+    }
+
+    #print-container {
+      position: relative;
+      background-color: #e5eaeb;
+      max-width: auto;
+      overflow: auto;
+      margin-top: 1em;
+      margin-left: 2em;
+      margin-right: 2em;
+    }
+
+    table {
+      border-collapse: collapse;
+      height: 100%;
+      position: relative;
+      border-bottom: 1px solid black;
+      transform: translate(-50%, 0%);
+      left: 50%;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid black;
+      width: 33.3%;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: black;
+      font-weight: 400;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(odd) {
+      background-color: white;
+    }
+
+    .first-column {
+      background-color: white;
+      text-align: center;
+    }
+
+    #notes {
+      background-color: white;
+    }
+
+    textarea {
+      width: calc(100% - 4px);
+      border: none;
+      padding-bottom: auto;
+      background: none;
+      max-height: 6em;
+      maxlength: 500;
+      overflow-x: scroll;
+      white-space: nowrap;
+    }
+
+    @media print {
+
+      body,
+      body * {
+        visibility: hidden;
+        background-color: white;
+      }
+
+      #print-container {
+        overflow: visible;
+      }
+
+      #print-container,
+      #print-container * {
+        visibility: visible;
+        background-color: white;
+      }
+
+      #header {
+        display: block;
+        margin-bottom: 2em;
+      }
+
+      #title {
+        display: none;
+      }
+
+      .container {
+        display: block;
+        background-color: white;
+      }
+
+      .print {
+        display: none;
+      }
+
+      table {
+        font-size: 10px;
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="burger" id="burger-btn">☰</div>
+    <div class="app-name">Trackside Aligner</div>
+    <div class="dropdown" id="dropdown-box">
+      <div class="dropdown_header">Trackside Aligner</div>
+      <a href="/trackside_aligner_demo/camber.html">
+        <img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
+        Camber
+      </a>
+      <a href="/trackside_aligner_demo/caster_kpi.html">
+        <img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
+        Caster / KPI
+      </a>
+      <a href="/trackside_aligner_demo/toe.html">
+        <img src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
+        Toe
+      </a>
+      <a>
+        <img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
+        Dimensions
+      </a>
+      <a id="active">
+        <img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
+        Protocol
+      </a>
+      <a href="/trackside_aligner_demo/settings.html">
+        <img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
+        Settings
+      </a>
+    </div>
+    <div class="overlay" id="overlay"></div>
+  </nav>
+  <div class="container">
+    <div id="print-container">
+      <h1 id="header">Trackside Aligner</h1>
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th>Alignment Parameter Category</th>
+            <th>Alignment Parameter</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="9" class="first-column">Front Axle</td>
+            <td>Total Toe</td>
+            <td>0.05&deg;</td>
+          </tr>
+          <tr>
+            <td>Toe Left</td>
+            <td>0.00&deg;</td>
+          </tr>
+          <tr>
+            <td>Toe Right</td>
+            <td>0.10&deg;</td>
+          </tr>
+          <tr>
+            <td>Camber Left</td>
+            <td>-0.50&deg;</td>
+          </tr>
+          <tr>
+            <td>Camber Right</td>
+            <td>-0.60&deg;</td>
+          </tr>
+          <tr>
+            <td>Caster Left</td>
+            <td>3.20&deg;</td>
+          </tr>
+          <tr>
+            <td>Caster Right</td>
+            <td>3.10&deg;</td>
+          </tr>
+          <tr>
+            <td>KPI Left</td>
+            <td>9.00&deg;</td>
+          </tr>
+          <tr>
+            <td>KPI Right</td>
+            <td>9.20&deg;</td>
+          </tr>
+          <tr>
+            <td rowspan="6" class="first-column">Rear Axle</td>
+            <td>Total Rear Toe</td>
+            <td>0.20&deg;</td>
+          </tr>
+          <tr>
+            <td>Toe Left</td>
+            <td>0.10&deg;</td>
+          </tr>
+          <tr>
+            <td>Toe Right</td>
+            <td>0.30&deg;</td>
+          </tr>
+          <tr>
+            <td>Camber Left</td>
+            <td>-1.20&deg;</td>
+          </tr>
+          <tr>
+            <td>Camber Right</td>
+            <td>-1.30&deg;</td>
+          </tr>
+          <tr>
+            <td>Thrust Angle</td>
+            <td>0.10&deg;</td>
+          </tr>
+          <tr>
+            <td rowspan="3" class="first-column">Dimensions</td>
+            <td>Track Width Front</td>
+            <td>1560 mm</td>
+          </tr>
+          <tr>
+            <td>Track Width Rear</td>
+            <td>1565 mm</td>
+          </tr>
+          <tr>
+            <td>Wheel Base</td>
+            <td>2700 mm</td>
+          </tr>
+          <tr>
+            <td colspan="3" id="notes">
+              <p>Notes:</p>
+              <textarea id="protocol-notes" rows="5" style="resize: none;"></textarea>
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+    <div class="print-buttons-container">
+      <button class="print" onclick="window.print()">⇩ PDF</button>
+      <button class="print" onclick="downloadCSV()">⇩ CSV</button>
+    </div>
+  </div>
+  <script>
+    let textArea = document.getElementById("protocol-notes");
+    textArea.addEventListener("input", function() {
+      let lines = textArea.value.split("\n");
+      let lineCount = lines.length;
+      for (let i = 0; i < lineCount; i++) {
+        let line = lines[i];
+        if (line.length > 80) {
+          let newLine = line.substring(0, 80);
+          lines[i] = newLine;
+          lines.splice(i + 1, 0, line.substring(80));
+          lineCount++;
+        }
+      }
+      if (lineCount > 5) {
+        lines.splice(5);
+      }
+      textArea.value = lines.join("\n");
+    });
+    textArea.addEventListener("keydown", function(event) {
+      if (event.key === "Backspace" && this.selectionStart === 0 && this.value.length === 0) {
+        event.preventDefault();
+      }
+    });
+    textArea.addEventListener("keyup", function(event) {
+      if (event.key === "Backspace" && this.selectionStart === 0 && this.value.length === 0) {
+        let lines = this.value.split("\n");
+        let lineCount = lines.length;
+        if (lineCount > 1) {
+          lines.splice(lineCount - 2, 2, lines[lineCount - 2] + lines[lineCount - 1]);
+          this.value = lines.join("\n");
+          this.setSelectionRange(lines[lineCount - 2].length, lines[lineCount - 2].length);
+        }
+      }
+    });
+
+    function downloadCSV() {
+      const table = document.getElementById('myTable');
+      const rows = Array.from(table.querySelectorAll('tr'));
+      const csvRows = [
+        ['Alignment Parameter Category', 'Alignment Parameter', 'Value']
+      ];
+      let currentRow = [];
+      let currentCategory = '';
+      rows.forEach((row, index) => {
+        const cells = Array.from(row.querySelectorAll('td'));
+        if (cells.length === 3) { // Alignment parameter row
+          const category = cells[0].textContent.trim();
+          const parameter = cells[1].textContent.trim();
+          const value = cells[2].textContent.trim();
+          if (category) { // New category
+            currentCategory = category;
+          }
+          csvRows.push([currentCategory, parameter, value]);
+          currentRow = [];
+        } else if (cells.length === 2) { // Rowspan
+          const parameter = cells[0].textContent.trim();
+          const value = cells[1].textContent.trim();
+          csvRows.push([, parameter, value]);
+          currentRow.push([, parameter, value]);
+        }
+        if (index === rows.length - 1 && currentRow.length && cells.length === 2) { // Last category
+          csvRows.push(currentRow[0]);
+          currentRow.slice(1).forEach(row => {
+            csvRows.push([, ...row.slice(1)]);
+          });
+        }
+      });
+      const notesTextArea = document.getElementById('protocol-notes');
+      const notes = notesTextArea ? notesTextArea.value.trim() : '';
+      csvRows.push(['Notes:' + '\n' + notes]);
+      const csvContent = csvRows.map(row => row.join(',')).join('\n');
+      const now = new Date();
+      const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}`;
+      const filename = `alignment-${timestamp}.csv`;
+      const blob = new Blob([csvContent], {
+        type: 'text/csv;charset=utf-8;'
+      });
+      if (navigator.msSaveBlob) { // For IE 10+
+        navigator.msSaveBlob(blob, filename);
+      } else {
+        const link = document.createElement('a');
+        if (link.download !== undefined) { // For other browsers
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', filename);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>
