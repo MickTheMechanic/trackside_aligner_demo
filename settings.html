@@ -2,9 +2,10 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" type="text/css" href="\trackside_aligner_demo\stylesheet.css">
+  <link rel="stylesheet" type="text/css" href="\stylesheet.css">
   <title>Trackside Aligner</title>
   <style>
     /* Add your CSS styles here */
@@ -26,6 +27,7 @@
       top: 50%;
       transform: translate(calc(-50% - 20px), -50%);
       background-color: white;
+      overflow-y: scroll;
     }
 
     .field-group {
@@ -55,7 +57,6 @@
     }
 
     .btn {
-      background-color: #007aff;
       color: white;
       padding: 10px;
       border: none;
@@ -69,76 +70,14 @@
     }
 
     button {
+      background-color: #007aff;
       width: 100%;
       max-width: 6em;
-    }
-
-    .info {
-      background: none;
-      border: none;
-      color: #007aff;
-      font-weight: 500;
-      font-size: unset;
-      margin-left: -0.3em;
       cursor: pointer;
-      width: 1em;
     }
 
-    .popup-header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top-left-radius: 9px;
-      border-top-right-radius: 9px;
-    }
-
-    .popup-header h3 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -75%);
-      background-color: white;
-      border: 1px solid black;
-      border-radius: 10px;
-      z-index: 99;
-      max-width: 30em;
-      width: 400px;
-    }
-
-    .popup-body {
-      padding: 20px;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .popup-body button {
-      background-color: #007aff;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      box-sizing: border-box;
-      margin-top: 20px;
-      display: block;
-      margin: 20px auto 0;
-    }
-
-    .popup-body button:hover {
-      background-color: #0050a4;
-      cursor: pointer;
+    .continue {
+      background-color: lightgrey;
     }
 
     .switch {
@@ -194,6 +133,37 @@
       transform: translateX(13px);
     }
 
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      color: #007aff;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      /* Position the tooltip above the button */
+      left: 50%;
+      margin-left: -100px;
+      /* Center the tooltip */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
     /* Add custom CSS styles for improved user experience on mobile devices */
     @media (max-width: 760px) {
       h1 {
@@ -217,20 +187,6 @@
 
       .field-group label {
         font-size: 14px;
-      }
-
-      .popup-header h3 {
-        font-size: 18px;
-      }
-
-      .popup-body button {
-        font-size: 14px;
-        padding: 8px 16px;
-        margin-top: 15px;
-      }
-
-      .popup {
-        max-width: 90%
       }
     }
 
@@ -262,49 +218,19 @@
         text-align: none;
       }
 
-      .popup {
-        transform: translate(-50%, -65%);
+      .tooltiptext {
+        bottom: auto !important;
+        /* Reset the bottom positioning */
+        top: 125%;
+        /* Position the tooltip below the button */
       }
     }
   </style>
 </head>
 
 <body>
-  <nav class="navbar">
-    <div class="burger" id="burger-btn">☰</div>
-    <div class="app-name">Trackside Aligner</div>
-    <div class="dropdown" id="dropdown-box">
-      <div class="dropdown_header">Trackside Aligner</div>
-      <a href="/trackside_aligner_demo/camber.html">
-        <img src="https://i.ibb.co/xJLG7sn/Camber-Front.png" alt="Camber-Front" border="0" class="icon">
-        Camber
-      </a>
-      <a href="/trackside_aligner_demo/caster_kpi.html">
-        <img src="https://i.ibb.co/TtR4Dc4/caster.png" alt="caster" border="0" class="icon">
-        Caster / KPI
-      </a>
-      <a href="/trackside_aligner_demo/toe.html">
-        <img src="https://i.ibb.co/hf1YNfk/Toe-front.png" alt="Toe-front" border="0" class="icon">
-        Toe
-      </a>
-      <a>
-        <img src="https://i.ibb.co/VwxW3xD/dimensions.png" alt="dimensions" border="0" class="icon">
-        Dimensions
-      </a>
-      <a href="/trackside_aligner_demo/protocol.html">
-        <img src="https://i.ibb.co/yQc49My/protocol.png" alt="protocol" border="0" class="icon">
-        Protocol
-      </a>
-      <a id="active">
-        <img src="https://i.ibb.co/sVgSZ1n/settings.png" alt="settings" border="0" class="icon">
-        Settings
-      </a>
-    </div>
-    <div class="overlay" id="overlay"></div>
-  </nav>
-
   <div class="container">
-    <form>
+    <form id="settingsForm">
       <div id="form-section-1">
         <div class="field-group">
           <h2>Camber Units</h2>
@@ -317,110 +243,195 @@
           <label><input type="radio" name="toe-units" value="degrees-minutes"> Degrees/Minutes</label><br>
           <label><input type="radio" name="toe-units" value="millimeters"> Millimeters</label>
         </div>
-
         <div class="field-group">
-          <h2>Automatic Wheelbase Detection</h2>
+          <h2>Thrust Angle Compensation <span class="tooltip">
+              ⓘ
+              <span class="tooltiptext">Aligns front toe angles to the thrust line rather than the centre line of the vehicle. (May be helpful on cars without an adjustable rear axle)</span>
+            </span>
+          </h2>
+          <label class="switch">
+            <input type="checkbox" id="thrust-comp-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="field-group">
+          <h2>Automatic Wheelbase Detection <span class="tooltip">
+              ⓘ
+              <span class="tooltiptext">Uses an iterative proccess to derive the wheelbase and other key values. (Entering the wheelbase manually may improve accuracy in some situations)</span>
+            </span></h2>
           <label class="switch">
             <input type="checkbox" id="auto-detect-toggle" checked>
             <span class="slider round"></span>
           </label>
         </div>
+
       </div>
       <div id="form-section-2">
-
         <div class="field-group">
-          <h2>Manual Wheelbase Input <button type="button" id="info-btn" class="info">ⓘ</button></h2>
+          <h2>Manual Wheelbase Input <span class="tooltip">
+              ⓘ
+              <span class="tooltiptext">Enter the wheelbase in mm. This value is necessary when "automatic wheelbase detection" is disabled. (May increase accuracy in some situations)</span>
+            </span></h2>
           <input type="number" name="manual-wheelbase-input" id="manual-input" disabled> mm</input>
         </div>
         <div class="field-group">
-          <h2>Wheel Diameter <button type="button" id="diameter-info-btn" class="info">ⓘ</button></h2>
+          <h2>Wheel Diameter <span class="tooltip">
+              ⓘ
+              <span class="tooltiptext">Enter the wheel (rim) diameter in inches. This value is necessary for calculating toe values in mm.</span></h2>
           <input type="number" name="wheel-diameter" id="wheel-diameter" disabled> Inches</input>
+        </div>
+        <div class="field-group">
+          <h2>Device Offset
+            <span class="tooltip">
+              ⓘ
+              <span class="tooltiptext">Enter the the distance between the device and the hub centre in mm. This value is necessary for correcting misalignment caused by camber.</span>
+            </span>
+          </h2>
+          <input type="number" name="device-offset" id="device-offset"> mm</input>
         </div>
       </div>
       <div id="save" class="field-group">
-        <button type="submit" class="btn">Save</button>
+        <button type="button" id="saveButton" class="btn">Save</button>
       </div>
-
     </form>
   </div>
-  <div id="popup" class="popup">
-    <div class="popup-content">
-      <div class="popup-header">
-        <h3>Information</h3>
-        <span class="close">&times;</span>
-      </div>
-      <div class="popup-body">
-        <p>Entering the wheelbase manually may improve accuracy in some situations. Enter the wheelbase in mm.<br>(Automatic wheelbase detection must be disabled)</p>
-        <button class="close">OK</button>
-      </div>
-    </div>
-
-  </div>
-  <div id="diameter-popup" class="popup">
-    <div class="popup-content">
-      <div class="popup-header">
-        <h3>Information</h3>
-        <span class="close">&times;</span>
-      </div>
-      <div class="popup-body">
-        <p>When using mm as toe units, the wheel (rim) diameter must be entered manually. Enter wheel diameter in inches.</p>
-        <button class="close">OK</button>
-      </div>
-    </div>
-  </div>
- <script src="script.js"></script>
+  <script src="/script.js"></script>
   <script>
     const toeUnits = document.querySelectorAll('input[name="toe-units"]');
     const wheelDiameterInput = document.getElementById('wheel-diameter');
-    const infoBtn = document.getElementById('info-btn');
-    const diameterInfoBtn = document.getElementById('diameter-info-btn');
-    const popup = document.getElementById('popup');
-    const diameterPopup = document.getElementById('diameter-popup');
-    const closeBtns = document.getElementsByClassName('close');
-    const manualInput = document.getElementById('manual-input');
     const autoDetectToggle = document.getElementById('auto-detect-toggle');
-    // Event listener for toe unit change
-    toeUnits.forEach(function(toeUnit) {
-      toeUnit.addEventListener('change', function() {
-        if (toeUnit.value === 'millimeters') {
-          wheelDiameterInput.removeAttribute('disabled');
-        } else {
-          wheelDiameterInput.setAttribute('disabled', '');
-        }
-      });
-    });
-    // Event listener for info button
-    infoBtn.addEventListener('click', function() {
-      popup.style.display = 'block';
-    });
-    // Event listener for diameter info button
-    diameterInfoBtn.addEventListener('click', function() {
-      diameterPopup.style.display = 'block';
-    });
-    // Event listener for close buttons
-    for (let i = 0; i < closeBtns.length; i++) {
-      closeBtns[i].addEventListener('click', function() {
-        popup.style.display = 'none';
-        diameterPopup.style.display = 'none';
-      });
-      closeBtns[i].addEventListener('mouseover', function() {
-        this.style.cursor = 'pointer'; // change cursor on hover
-      });
-    }
-    // Event listener for automatic wheelbase detection toggle
-    autoDetectToggle.addEventListener('change', function() {
-      if (this.checked) {
+    const thrustCompToggle = document.getElementById('thrust-comp-toggle');
+    const manualInput = document.getElementById('manual-input');
+    const deviceOffset = document.getElementById('device-offset');
+
+    function updateInputFields() {
+      if (autoDetectToggle.checked) {
         manualInput.setAttribute('disabled', '');
       } else {
         manualInput.removeAttribute('disabled');
       }
+      const selectedToeUnit = Array.from(toeUnits).find((radio) => radio.checked);
+      if (selectedToeUnit.value === 'millimeters') {
+        wheelDiameterInput.removeAttribute('disabled');
+      } else {
+        wheelDiameterInput.setAttribute('disabled', '');
+      }
+    }
+    toeUnits.forEach(function(toeUnit) {
+      toeUnit.addEventListener('change', updateInputFields);
     });
+    autoDetectToggle.addEventListener('change', updateInputFields);
     // Event listener for hiding keyboard on touch devices
     document.addEventListener('touchstart', function(e) {
       if (!e.target.matches('input')) {
         document.activeElement.blur();
       }
     });
+    window.onload = async () => {
+      const settingsForm = document.getElementById('settingsForm');
+      const camberUnits = document.querySelectorAll('input[name="camber-units"]');
+      const saveButton = document.getElementById('saveButton');
+      async function fetchSettings() {
+        const response = await fetch('/getSettings');
+        const data = await response.json();
+        // Create a mapping between integers and strings for radio button values
+        const camberUnitMapping = {
+          1: "decimal",
+          2: "degrees-minutes"
+        };
+        const toeUnitMapping = {
+          1: "decimal",
+          2: "degrees-minutes",
+          3: "millimeters"
+        };
+        // Convert the saved integer values to their corresponding string values
+        const savedCamberUnit = camberUnitMapping[data.camberUnits];
+        const savedToeUnit = toeUnitMapping[data.toeUnits];
+		
+        camberUnits.forEach((radio) => {
+          if (radio.value === savedCamberUnit) {
+            radio.checked = true;
+          }
+        });
+        toeUnits.forEach((radio) => {
+          if (radio.value === savedToeUnit) {
+            radio.checked = true;
+          }
+        });
+        autoDetectToggle.checked = data.autoWheelbaseDetection;
+        thrustCompToggle.checked = data.thrustCompensation;
+        manualInput.value = data.wheelbase;
+        wheelDiameterInput.value = data.wheelDiameter;
+        deviceOffset.value = data.deviceOffset;
+        updateInputFields();
+      }
+      async function saveSettings() {
+        const selectedCamberUnit = Array.from(camberUnits).find((radio) => radio.checked);
+        const selectedToeUnit = Array.from(toeUnits).find((radio) => radio.checked);
+        // Create a reverse mapping to save the integer values in the database
+        const camberUnitReverseMapping = {
+          "decimal": 1,
+          "degrees-minutes": 2
+        };
+        const toeUnitReverseMapping = {
+          "decimal": 1,
+          "degrees-minutes": 2,
+          "millimeters": 3
+        };
+        const settings = {
+          camberUnits: camberUnitReverseMapping[selectedCamberUnit.value],
+          toeUnits: toeUnitReverseMapping[selectedToeUnit.value],
+          autoWheelbaseDetection: autoDetectToggle.checked,
+          thrustCompensation: thrustCompToggle.checked,
+          wheelbase: parseInt(manualInput.value),
+          wheelDiameter: parseInt(wheelDiameterInput.value),
+          deviceOffset: parseInt(deviceOffset.value)
+        };
+        await fetch('/saveSettings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'body=' + encodeURIComponent(JSON.stringify(settings))
+        });
+      }
+      await fetchSettings();
+      saveButton.addEventListener('click', async () => {
+        await saveSettings();
+      }); 
+	  // Initialize WebSocket connection
+	  connectWebSocket();
+    };
+	let ws;
+	
+	function connectWebSocket() {
+      ws = new WebSocket('ws://192.168.4.1/ws');
+        ws.onopen = () => {
+        console.log('WebSocket connected');
+        // Send a message immediately after the WebSocket connection opens
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ "MODE": 1 })); // Replace with the desired mode
+        }
+    };
+      ws.onmessage = (event) => {
+	    const data = JSON.parse(event.data);
+      };
+      ws.onclose = (event) => {
+        console.log('Disconnected');
+        setTimeout(connectWebSocket, 5000);
+      };
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+    connectWebSocket();
+    setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          "MODE": 1
+        })); // Replace with the desired mode
+      }
+    }, 250);
   </script>
 </body>
 

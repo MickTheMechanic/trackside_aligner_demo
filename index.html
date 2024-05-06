@@ -2,97 +2,166 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" type="text/css" href="\stylesheet.css">
   <title>Trackside Aligner</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #333;
-      font-family: system-ui;
-    }
 
-    .center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      height: 100vh;
-      text-align: center;
-    }
-
-    h1 {
-      font-variant-caps: petite-caps;
-      font-weight: 400;
-      font-size: 4em;
-      margin-bottom: 4.5em;
-      line-height: 1;
-      filter: drop-shadow(2px 2px 2px black);
-      color: #e5eaeb;
-      font-style: italic;
-    }
-
-    #button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2rem;
-      color: white;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      text-decoration: none;
-      content: "Click to continue";
-      filter: drop-shadow(2px 2px 2px #0d2120);
-      opacity: 0.05;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.2;
-      }
-
-      100% {
-        opacity: 1;
-      }
-    }
-
-    #button:before {
-      content: "Click to continue";
-    }
-
-    @media (pointer: coarse) {
-      #button:before {
-        display: none;
-      }
-
-      #button:after {
-        content: "Tap to continue";
-      }
-    }
-
-    #image {
-      position: absolute;
-      height: 100%;
-      z-index: -1;
-      filter: drop-shadow(2px 2px 2px #0d2120);
-      opacity: 0.05;
-    }
+	.iframe {
+			height: 100%;
+			width: 100%;
+			z-index: -999;
+			border: none;
+			 overflow: hidden;
+		}
+		
+	.window {
+	height: calc(100vh - 60px);
+    margin: 0 auto;
+    background-color: #e5eaeb;
+    position: relative;
+	z-index: -99;
+	}
   </style>
 </head>
 
 <body>
-  <div class="center">
-    <img id="image" src="https://i.ibb.co/KhYbrb4/Top-View-M4.png" alt="Top-View-M4" border="0">
-    <h1>Trackside Aligner</h1>
-    <a id="button" href="/trackside_aligner_demo/camber.html"></a>
+  <nav class="navbar">
+    <div class="burger" id="burger-btn">☰</div>
+    <div class="app-name">Trackside Aligner</div>
+    <div class="dropdown" id="dropdown-box">
+      <div class="dropdown_header">Trackside Aligner</div>
+	  <div class="dropdown-header">
+          <div class="battery-column">
+            <div class="battery">
+              <div id="batteryChargeBFL" class="battery-charge"></div>
+              <span id="batteryLevelBFL" class="battery-level"></span>
+            </div>
+            <div class="battery-terminal"></div>
+
+            <div class="battery">
+              <div id="batteryChargeBRL" class="battery-charge"></div>
+              <span id="batteryLevelBRL" class="battery-level"></span>
+            </div>
+            <div class="battery-terminal"></div>
+          </div>
+
+          <img src="/Top-View-M4.png" alt="Top-View-M4" class="navbar-image">
+
+          <div class="battery-column">
+            <div class="battery">
+              <div id="batteryChargeBFR" class="battery-charge"></div>
+              <span id="batteryLevelBFR" class="battery-level"></span>
+            </div>
+            <div class="battery-terminal"></div>
+
+            <div class="battery">
+              <div id="batteryChargeBRR" class="battery-charge"></div>
+              <span id="batteryLevelBRR" class="battery-level"></span>
+            </div>
+            <div class="battery-terminal"></div>
+          </div>
+        </div>
+      <a class="iframe-link" href="/camber.html">
+        <img src="/Camber.png" alt="Camber" border="0" class="icon">
+        Camber
+      </a>
+      <a href="javascript:void(0)" class="submenu-parent" id="casterKpiLink">
+        <img src="/caster.png" alt="caster" border="0" class="icon">
+        Caster / KPI
+      </a>
+      <div class="sub-menu" id="caster-submenu">
+        <a class="iframe-link" href="/caster_measure.html">New Measurement</a>
+        <a class="iframe-link" href="/caster.html">Current Values</a>
+      </div>
+      <a class="iframe-link" href="/toe.html">
+        <img src="/Toe-front.png" alt="Toe-front" border="0" class="icon">
+        Toe
+      </a>
+      <a>
+        <img src="/Weight.png" alt="Weight" border="0" class="icon">
+        Corner Weights
+      </a>
+      <a class="iframe-link" href="/protocol.html">
+        <img src="/protocol.png" alt="protocol" border="0" class="icon">
+        Protocol
+      </a>
+      <a href="javascript:void(0)" class="submenu-parent" id="settingsLink">
+        <img src="/settings.png" alt="settings" border="0" class="icon">
+        Settings
+      </a>
+      <div class="sub-menu" id="settings-submenu">
+        <a class="iframe-link" href="/settings.html">Preferences</a>
+        <a class="iframe-link" href="/calibration.html">Calibration</a>
+      </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+  </nav>
+  <div class="window">
+    
+	<iframe class="iframe" src="/camber.html" title="Camber">
+	</iframe>
   </div>
+  <script src="/script.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+  // Select all <a> elements intended for iframe navigation
+  const iframeLinks = document.querySelectorAll('a.iframe-link');
+  
+  iframeLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // Prevent the default navigation behavior
+      e.preventDefault();
+      
+      // Get the URL intended for the iframe from the 'href' attribute
+      const targetSrc = this.getAttribute('href');
+      
+      // Find the iframe and set its 'src' to the intended URL
+      document.querySelector('.iframe').src = targetSrc;
+    });
+  });
+});
+function fetchBatteryLevelsAndUpdateDisplay() {
+    fetch('/getBattery')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Assuming data is in the form { "BFR": 100, "BFL": 75, "BRR": 50, "BRL": 25 }
+        updateBatteryDisplay(data.BFL, 'batteryChargeBFL', 'batteryLevelBFL');
+        updateBatteryDisplay(data.BFR, 'batteryChargeBFR', 'batteryLevelBFR');
+        updateBatteryDisplay(data.BRL, 'batteryChargeBRL', 'batteryLevelBRL');
+        updateBatteryDisplay(data.BRR, 'batteryChargeBRR', 'batteryLevelBRR');
+    })
+    .catch(error => {
+        console.error('Failed to fetch battery levels:', error);
+    });
+}
+
+function updateBatteryDisplay(batteryLevel, chargeElementId, levelElementId) {
+    const batteryCharge = document.getElementById(chargeElementId);
+    const batteryLevelText = document.getElementById(levelElementId);
+    batteryCharge.style.width = batteryLevel + '%';
+    batteryLevelText.innerText = batteryLevel;
+    if (batteryLevel <= 25) {
+        batteryCharge.style.backgroundColor = '#ff3737';
+    } else if (batteryLevel <= 45) {
+        batteryCharge.style.backgroundColor = '#ffa914';
+    } else {
+        batteryCharge.style.backgroundColor = 'limegreen';
+    }
+}
+
+// Setup the interval to fetch and update the battery levels every 1 second (1000 milliseconds)
+setInterval(fetchBatteryLevelsAndUpdateDisplay, 5000);
+  </script>
+
 </body>
 
 </html>

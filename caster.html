@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" type="text/css" href="\stylesheet.css">
+  <title>Trackside Aligner</title>
+  <style>
+    .container {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 0.5fr 1fr 0.5fr 1fr;
+    }
+
+    #div1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    #div2 {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    #div3 {
+      grid-column: 1/3;
+      grid-row: 2;
+      position: relative;
+      margin: 0.2em;
+    }
+
+    #div4 {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    #div5 {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    #div6 {
+      grid-column: 1/3;
+      grid-row: 4;
+      position: relative;
+      margin: 0.2em;
+    }
+
+    @media (min-aspect-ratio: 1/1) {
+      .container {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 0.5fr 1fr;
+      }
+
+      #div1 {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #div2 {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      #div3 {
+        grid-column: 1/3;
+        grid-row: 2;
+      }
+
+      #div4 {
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      #div5 {
+        grid-column: 4;
+        grid-row: 1;
+      }
+
+      #div6 {
+        grid-column: 3/5;
+        grid-row: 2;
+      }
+    }
+
+    .vertical-lines-sai {
+      position: absolute;
+      width: 63%;
+      height: 100%;
+      left: 18%;
+      top: 0;
+      border-right: 3px solid crimson;
+      border-left: 3px solid crimson;
+      box-shadow: 0 0px 5px crimson;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 1;
+    }
+
+    .vertical-lines-caster {
+      position: absolute;
+      width: 61%;
+      height: 100%;
+      left: 19%;
+      top: 0;
+      border-right: 3px solid crimson;
+      border-left: 3px solid crimson;
+      box-shadow: 0 0px 5px crimson;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 1;
+    }
+
+    .left-wheel,
+    .right-wheel {
+      position: absolute;
+      width: 18%;
+      height: 45%;
+      background: black;
+      bottom: 0;
+      border-radius: 10%;
+    }
+
+    .left-wheel {
+      left: 5%;
+      transform: rotate(5deg);
+    }
+
+    .left-line.left-angles.rear-left {
+      left: 19%;
+	  transform-origin: 0% 78%;
+    }
+
+    .left-line.left-angles.front-right {
+      left: 18%;
+	  transform-origin: 0% 75%;
+    }
+
+    .right-wheel {
+      right: 5%;
+      transform: rotate(-5deg);
+    }
+
+    .right-line.right-angles.rear-right {
+      right: 19%;
+	  transform-origin: 0% 78%;
+    }
+
+    .right-line.right-angles.front-left {
+      right: 18%;
+	  transform-origin: 0% 75%;
+    }
+
+    .left-line,
+    .right-line {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      transform-origin: 0% 100%;
+    }
+
+    .left-line {
+      left: 5%;
+      border-left: 3px solid green;
+      box-shadow: 0 0px 5px green;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 2;
+    }
+
+    .right-line {
+      right: 5%;
+      border-right: 3px solid green;
+      box-shadow: 0 0px 5px green;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="div1" class="div rightbox">-----</div>
+    <div id="div2" class="div leftbox">-----</div>
+    <div id="div3" class="left-container">
+      <div class="image-container">
+        <img class="image" src="/Front-1.png" alt="Front-1" border="0">
+        <div class="left-line left-angles front-right"></div>
+        <div class="right-line right-angles front-left"></div>
+        <div class="vertical-lines-sai"></div>
+        <div class="left-wheel"></div>
+        <div class="right-wheel"></div>
+      </div>
+    </div>
+    <div id="div4" class="div rightbox">-----</div>
+    <div id="div5" class="div leftbox">-----</div>
+    <div id="div6" class="right-container">
+      <div class="image-container">
+        <img class="image" src="/Side-1.png" alt="Rear-1" border="0">
+        <div class="left-line left-angles rear-left"></div>
+        <div class="right-line right-angles rear-right"></div>
+        <div class="vertical-lines-caster"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="/script.js"></script>
+  <script>
+    const centerContainer = document.querySelector("#div3");
+    const imageContainer = document.querySelectorAll(".image-container");
+    const aspectRatio = 1449 / 1000;
+
+    function setImageContainerDimensions() {
+      const parentWidth = centerContainer.offsetWidth;
+      const parentHeight = centerContainer.offsetHeight;
+      let childWidth = parentWidth;
+      let childHeight = childWidth / aspectRatio;
+      if (childHeight > parentHeight) {
+        childHeight = parentHeight;
+        childWidth = childHeight * aspectRatio;
+      }
+      imageContainer[0].style.width = childWidth + "px";
+      imageContainer[0].style.height = childHeight + "px";
+      imageContainer[1].style.width = childWidth + "px";
+      imageContainer[1].style.height = childHeight + "px";
+    }
+    setImageContainerDimensions();
+    window.addEventListener("resize", setImageContainerDimensions);
+
+    function decimalToDegreesMinutes(decimalDegrees) {
+      const degrees = Math.floor(Math.abs(decimalDegrees));
+      const minutes = (Math.abs((decimalDegrees % 1) * 60)).toFixed(0).padStart(2, '0');
+      return `${decimalDegrees >= 0 ? '+' : '-'}${degrees}\u00B0${minutes}'`;
+    }
+
+    function formatDecimal(degrees) {
+      return `${degrees >= 0 ? '+' : ''}${degrees.toFixed(2)}\u00B0`;
+    }
+    let camberUnit = "decimal";
+    async function fetchSettings() {
+      const response = await fetch('/getSettings');
+      const data = await response.json();
+      const camberUnitMapping = {
+        1: "decimal",
+        2: "degrees-minutes"
+      };
+      camberUnit = camberUnitMapping[data.camberUnits];
+    }
+    document.addEventListener('DOMContentLoaded', fetchSettings);
+    let ws;
+
+    function connectWebSocket() {
+      ws = new WebSocket('ws://192.168.4.1/ws');
+     ws.onopen = () => {
+        console.log('WebSocket connected');
+        // Send a message immediately after the WebSocket connection opens
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ "MODE": 3 })); // Replace with the desired mode
+        }
+    };
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const CFR = data.CFR;
+        const CFL = data.CFL;
+        const CAL = data.CAL;
+        const CAR = data.CAR;
+        const SAL = data.SAL;
+        const SAR = data.SAR;
+		
+        // ... (rest of the code remains the same)
+        const frontLeftWheel = document.querySelectorAll('.left-wheel');
+        frontLeftWheel.forEach(element => {
+          element.style.transform = `rotate(${CFL}deg)`;
+        });
+        const frontRightWheel = document.querySelectorAll('.right-wheel');
+        frontRightWheel.forEach(element => {
+          element.style.transform = `rotate(${CFR * -1}deg)`;
+        });
+		
+		
+        const leftSAI = document.querySelectorAll('.front-left');
+        leftSAI.forEach(element => {
+          element.style.transform = `rotate(${SAL * -1}deg)`;
+        });
+        const rightSAI = document.querySelectorAll('.front-right');
+        rightSAI.forEach(element => {
+          element.style.transform = `rotate(${SAR}deg)`;
+        });
+		
+		
+		const leftCaster = document.querySelectorAll('.rear-left');
+        leftCaster.forEach(element => {
+          element.style.transform = `rotate(${CAL * -1}deg)`;
+        });
+        const rightCaster = document.querySelectorAll('.rear-right');
+        rightCaster.forEach(element => {
+          element.style.transform = `rotate(${CAR }deg)`;
+        });
+		
+		
+        const formattedSAL = camberUnit === "decimal" ? formatDecimal(SAL) : decimalToDegreesMinutes(SAL);
+        const formattedSAR = camberUnit === "decimal" ? formatDecimal(SAR) : decimalToDegreesMinutes(SAR);
+		const formattedCAL = camberUnit === "decimal" ? formatDecimal(CAL) : decimalToDegreesMinutes(CAL);
+        const formattedCAR = camberUnit === "decimal" ? formatDecimal(CAR) : decimalToDegreesMinutes(CAR);
+        document.getElementById("div1").innerText = formattedSAR;
+        document.getElementById("div2").innerText = formattedSAL;
+        document.getElementById("div4").innerText = formattedCAL;
+        document.getElementById("div5").innerText = formattedCAR;
+      };
+      ws.onclose = (event) => {
+        console.log('Disconnected');
+        setTimeout(connectWebSocket, 5000);
+      };
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+    connectWebSocket();
+    setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          "MODE": 3
+        })); // Replace with the desired mode
+      }
+    }, 500);
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" type="text/css" href="\stylesheet.css">
+  <title>Trackside Aligner</title>
+  <style>
+    .container {
+      grid-template-rows: 0.5fr 1fr 0.5fr 1fr;
+    }
+
+    #div1 {
+      grid-row: 1;
+    }
+
+    #div3 {
+      grid-row: 2;
+      position: relative;
+      margin: 0.2em;
+    }
+
+    #div4 {
+      grid-row: 3;
+    }
+
+    #div5 {
+      grid-row: 3;
+    }
+
+    #div6 {
+      grid-row: 4;
+      position: relative;
+      margin: 0.2em;
+    }
+
+    @media (min-aspect-ratio: 1/1) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 0.5fr 1fr;
+      }
+
+      #div1 {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #div3 {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #div4 {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      #div6 {
+        grid-column: 2;
+        grid-row: 2;
+      }
+    }
+
+    .left-wheel,
+    .right-wheel {
+      position: absolute;
+      width: 22%;
+      height: 48%;
+      top: 30%;
+      background: black;
+      bottom: 0;
+      border-radius: 10%;
+    }
+
+    .left-wheel {
+      left: 9%;
+      transform: rotate(0deg);
+      transform-origin: bottom center;
+    }
+
+    .right-wheel {
+      right: 9%;
+      transform: rotate(0deg);
+      transform-origin: bottom center;
+    }
+
+    .target {
+      background: dimgray;
+      z-index: -1;
+      border: 1px solid black;
+      opacity: 0.55;
+    }
+
+    .right-line,
+    .left-line {
+      right: 50%;
+      border-right: 3px solid green;
+      box-shadow: 0 0px 5px green;
+      clip-path: inset(1px -15px 1px -15px);
+      z-index: 2;
+      height: 155%;
+      bottom: 0%;
+      position: absolute;
+    }
+
+    .red {
+      border-right: 3px solid crimson;
+      box-shadow: 0 0px 5px crimson;
+    }
+
+    .image {
+      width: 80%;
+      left: 10%;
+      height: auto;
+      z-index: -99;
+    }
+
+    .steering-wheel {
+      width: 60%;
+      left: 20%;
+      position: absolute;
+      top: 20%;
+      transition: transform 0.5s linear;
+    }
+	
+	 .popup {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .popup-content p {
+      margin-bottom: 15px;
+    }
+	
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="div1" class="div rightbox">----</div>
+    <div id="div3" class="left-container">
+      <div class="image-container">
+        <img class="steering-wheel image" src="/SteeringWheel.png" alt="imageedit-25-5232937330" border="0">
+
+      </div>
+    </div>
+    <div id="div4" class="div rightbox">----</div>
+    <div id="div6" class="right-container">
+      <div class="image-container">
+        <img class="image" src="/TopFrontViewM4_Optimized.png" alt="Top-Front-View-M4-Optimized" border="0">
+        <div class="left-wheel wheel">
+          <div class="left-line green"></div>
+        </div>
+        <div class="right-wheel wheel">
+          <div class="right-line green"></div>
+        </div>
+        <div class="left-wheel target">
+          <div class="left-line red"></div>
+        </div>
+        <div class="right-wheel target">
+          <div class="right-line red"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <p>Turn wheels to straight ahead position.</p>
+      <button id="begin-btn">Begin</button>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+  <script>
+    const centerContainer = document.querySelector("#div3");
+    const imageContainer = document.querySelectorAll(".image-container");
+    const aspectRatio = 1449 / 1000;
+
+    function setImageContainerDimensions() {
+      const parentWidth = centerContainer.offsetWidth;
+      const parentHeight = centerContainer.offsetHeight;
+      let childWidth = parentWidth;
+      let childHeight = childWidth / aspectRatio;
+      if (childHeight > parentHeight) {
+        childHeight = parentHeight;
+        childWidth = childHeight * aspectRatio;
+      }
+      imageContainer[0].style.width = childWidth + "px";
+      imageContainer[0].style.height = childHeight + "px";
+      imageContainer[1].style.width = childWidth + "px";
+      imageContainer[1].style.height = childHeight + "px";
+    }
+    setImageContainerDimensions();
+    window.addEventListener("resize", setImageContainerDimensions);
+    let ws;
+	let zeroMeasurementTaken = false;
+	
+    function connectWebSocket() {
+      ws = new WebSocket('ws://192.168.4.1/ws');
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+        // Send a message immediately after the WebSocket connection opens
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ "MODE": 1 })); // Replace with the desired mode
+        }
+    };
+      ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+        const INSTR = data.INSTR;
+        const SA = data.SA;
+        const ST = data.ST;
+  
+		if (ST !== 0) {
+			zeroMeasurementTaken = true;
+		}
+
+
+
+        // Correct the iteration for front-right elements
+        const wheelElements = document.querySelectorAll('.wheel');
+        wheelElements.forEach(element => {
+          element.style.transform = `rotate(${SA}deg)`;
+        });
+        const targetElements = document.querySelectorAll('.target');
+        targetElements.forEach(element => {
+          element.style.transform = `rotate(${ST}deg)`;
+        });
+        const steeringWheel = document.querySelector('.steering-wheel');
+        if (steeringWheel) {
+          let currentAngle = parseInt(steeringWheel.getAttribute('data-angle')) || 0;
+          switch (INSTR) {
+            case -1: // Turn left
+              currentAngle -= 10; // Adjust the angle decrement as needed
+              break;
+            case 0: // Stop (maintain current angle)
+              break;
+            case 1: // Turn right
+              currentAngle += 10; // Adjust the angle increment as needed
+              break;
+              // Handle default case if needed
+          }
+          steeringWheel.style.transform = `rotate(${currentAngle}deg)`;
+          steeringWheel.setAttribute('data-angle', currentAngle); // Store the current angle
+        }
+        // Update div1 text based on instruction
+        let div1Text = '';
+        switch (INSTR) {
+          case -1:
+            div1Text = 'Turn left';
+            break;
+          case 0:
+            div1Text = 'STOP';
+            break;
+          case 1:
+            div1Text = 'Turn right';
+            break;
+          default:
+            div1Text = 'Invalid instruction';
+        }
+        document.getElementById("div1").innerText = div1Text;
+        // Update div4 text with steering angle
+        document.getElementById("div4").innerText = SA.toFixed(1) + "°";
+        // Redirect if instruction is 0 and steeringAngle is within 0 ± 0.5
+         if (INSTR === 0 && Math.abs(SA) <= 0.5 && zeroMeasurementTaken) {
+          setTimeout(() => {
+            window.location.href = "/caster.html"; // Replace with your desired URL
+           }, 500); // 500 milliseconds delay
+        		}
+      };
+      ws.onclose = (event) => {
+        console.log('Disconnected');
+        setTimeout(connectWebSocket, 5000);
+      };
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+      var popup = document.getElementById('popup');
+      var beginBtn = document.getElementById('begin-btn');
+      // Show popup on page load
+      popup.style.display = 'flex';
+      beginBtn.onclick = function() {
+        popup.style.display = 'none'; // Hide the popup
+        connectWebSocket(); // Establish WebSocket connection when 'Begin' is clicked
+      };
+    });
+    setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          "MODE": 4
+        })); // Replace with the desired mode
+      }
+    }, 250);
+  </script>
+
+</body>
+
+</html>

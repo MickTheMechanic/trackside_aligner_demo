@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" type="text/css" href="\stylesheet.css">
+  <title>Trackside Aligner - Calibration</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    form {
+      padding: 20px;
+      margin: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-width: 50em;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-50% - 20px), -50%);
+      background-color: white;
+      overflow-y: scroll;
+    }
+
+    .field-group {
+      margin: 10px;
+    }
+
+    .field-group input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      max-width: 6em;
+      font-size: 16px;
+    }
+
+    .field-group h2 {
+      margin: 0;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .field-group label {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .btn {
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      box-sizing: border-box;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%, 10%);
+    }
+
+    button {
+      background-color: #007aff;
+      width: 100%;
+      max-width: 6em;
+      cursor: pointer;
+    }
+
+    .continue {
+      background-color: lightgrey;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 17px;
+      margin-top: 5px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 17px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #007aff;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #007aff;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(13px);
+      transform: translateX(13px);
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      color: #007aff;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      /* Position the tooltip above the button */
+      left: 50%;
+      margin-left: -100px;
+      /* Center the tooltip */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Add custom CSS styles for improved user experience on mobile devices */
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 26px;
+        padding: 15px;
+      }
+
+      form {
+        margin: 10px;
+        padding: 10px;
+        transform: translate(calc(-50% - 10px), -50%);
+      }
+
+      .field-group input[type="number"] {
+        padding: 8px;
+      }
+
+      .field-group h2 {
+        font-size: 14px;
+      }
+
+      .field-group label {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-height: 600px) {
+      form {
+        margin-top: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr 3em;
+      }
+
+      #form-section-1 {
+        position: relative;
+        display: block;
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      #form-section-2 {
+        position: relative;
+        display: block;
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      #save {
+        grid-column: 1/3;
+        grid-row: 2;
+        text-align: none;
+      }
+
+      .tooltiptext {
+        bottom: auto !important;
+        /* Reset the bottom positioning */
+        top: 125%;
+        /* Position the tooltip below the button */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <form id="calibrationForm">
+      <!-- Section for Camber Calibration Offsets -->
+      <div id="form-section-1">
+        <h2>Camber Calibration Offsets</h2>
+        <div class="field-group">
+          <h2 id="headerFrontLeftCamber">Front Left</h2>
+          <input id="CFLO" type="number" step="0.01">
+          <span id="CFL">0</span> degrees<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerFrontRightCamber">Front Right</h2>
+          <input id="CFRO" type="number" step="0.01">
+          <span id="CFR">0</span> degrees<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerRearLeftCamber">Rear Left</h2>
+          <input id="CRLO" type="number" step="0.01">
+          <span id="CRL">0</span> degrees<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerRearRightCamber">Rear Right</h2>
+          <input id="CRRO" type="number" step="0.01">
+          <span id="CRR">0</span> degrees<br>
+        </div>
+      </div>
+
+      <!-- Section for Track Width Sensor Offsets -->
+      <div id="form-section-2">
+        <h2>Track Width Sensor Offsets</h2>
+        <div class="field-group">
+          <h2 id="headerFrontLeftTrackWidth">Front Sensor 1</h2>
+          <input id="ACO" type="number" step="0.1">
+          <span id="AC">0</span> mm<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerFrontRightTrackWidth">Front Sensor 2</h2>
+          <input id="BDO" type="number" step="0.1">
+          <span id="BD">0</span> mm<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerRearLeftTrackWidth">Rear Sensor 1</h2>
+          <input id="KMO" type="number" step="0.1">
+          <span id="KM">0</span> mm<br>
+        </div>
+        <div class="field-group">
+          <h2 id="headerRearRightTrackWidth">Rear Sensor 2</h2>
+          <input id="LNO" type="number" step="0.1">
+          <span id="LN">0</span> mm<br>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <div id="save" class="field-group">
+        <button type="button" id="saveButton" class="btn">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/script.js"></script>
+  <script>
+    let ws;
+
+
+    window.onload = async () => {
+    const CFLO = document.getElementById('CFLO');
+    const CFRO = document.getElementById('CFRO');
+    const CRLO = document.getElementById('CRLO');
+    const CRRO = document.getElementById('CRRO');
+    const ACO = document.getElementById('ACO');
+    const BDO = document.getElementById('BDO');
+    const KMO = document.getElementById('KMO');
+    const LNO = document.getElementById('LNO');
+    async function fetchSettings() {
+		const response = await fetch('/getSettings');
+		const data = await response.json();
+		CFLO.value = Math.round(parseFloat(data.CFLO) * 100) / 100;
+		CFRO.value = Math.round(parseFloat(data.CFRO) * 100) / 100;
+		CRLO.value = Math.round(parseFloat(data.CRLO) * 100) / 100;
+		CRRO.value = Math.round(parseFloat(data.CRRO) * 100) / 100;
+		ACO.value = Math.round(parseFloat(data.ACO) * 100) / 100;
+		BDO.value = Math.round(parseFloat(data.BDO) * 100) / 100;
+		KMO.value = Math.round(parseFloat(data.KMO) * 100) / 100;
+		LNO.value = Math.round(parseFloat(data.LNO) * 100) / 100;
+	}
+    async function saveSettings() {
+      const settings = {
+        CFLO: parseFloat(CFLO.value).toFixed(2),
+        CFRO: parseFloat(CFRO.value).toFixed(2),
+        CRLO: parseFloat(CRLO.value).toFixed(2),
+        CRRO: parseFloat(CRRO.value).toFixed(2),
+        ACO: parseFloat(ACO.value).toFixed(2),
+        BDO: parseFloat(BDO.value).toFixed(2),
+        KMO: parseFloat(KMO.value).toFixed(2),
+        LNO: parseFloat(LNO.value).toFixed(2)
+      };
+      await fetch('/saveSettings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'body=' + encodeURIComponent(JSON.stringify(settings))
+      });
+    }
+
+    function connectWebSocket() {
+      ws = new WebSocket('ws://192.168.4.1/ws');
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            "MODE": 3
+          })); // Replace with the desired mode
+        }
+      };
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        // Assuming data contains angles for different elements
+        updateUI(data);
+		
+		
+      };
+      ws.onclose = () => {
+        console.log('WebSocket disconnected. Reconnecting...');
+        setTimeout(connectWebSocket, 5000);
+      };
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+
+   function updateUI(data) {
+      const CFR = data.CFR;
+      const CFL = data.CFL;
+      const CRL = data.CRL;
+      const CRR = data.CRR;
+      const AC = data.AC;
+      const BD = data.BD;
+      const KM = data.KM;
+      const LN = data.LN;
+      document.getElementById('CFR').textContent = CFR;
+      document.getElementById('CFL').textContent = CFL;
+      document.getElementById('CRL').textContent = CRL;
+      document.getElementById('CRR').textContent = CRR;
+      document.getElementById('AC').textContent = AC;
+      document.getElementById('BD').textContent = BD;
+      document.getElementById('KM').textContent = KM;
+      document.getElementById('LN').textContent = LN;
+    }
+    // Initiate fetching settings and setting up WebSocket connection
+    (async () => {
+      await fetchSettings();
+      connectWebSocket();
+    })();
+    // Setup save button event listener
+    const saveButton = document.getElementById('saveButton');
+    saveButton.addEventListener('click', async () => {
+      await saveSettings();
+    });
+    // Maintain WebSocket connection
+    setInterval(() => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          "MODE": 3
+        })); // Keep sending the desired mode to keep the connection alive
+      }
+    }, 250);
+	};
+  </script>
+</body>
+
+</html>

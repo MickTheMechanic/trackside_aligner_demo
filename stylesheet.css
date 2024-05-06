@@ -94,6 +94,88 @@ body {
   font-style: italic;
 }
 
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+/* Navbar image styling */
+.navbar-image {
+  width: 2.5em; /* Adjust the size as needed */
+  height: auto;
+  filter: drop-shadow(0 0 3px darkgrey);
+}
+
+/* Battery column styling */
+.battery-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Individual battery styling */
+.battery {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 14px;
+  background-color: #ccc; /* Light background for empty part */
+  border-radius: 3px;
+  overflow: hidden; /* Ensures inner box doesn't exceed battery boundaries */
+  left:-2px;
+}
+
+/* Inner box representing battery charge */
+.battery-charge {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: green; /* Default fill color */
+  border-radius: 3px 0 0 3px;
+  transition: width 0.3s ease;
+}
+
+/* Battery level text styling */
+.battery-level {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: system-ui;
+  color: black; /* High contrast for readability */
+  text-align: center;
+  z-index: 1;
+}
+
+/* Battery terminal styling */
+.battery-terminal {
+  position: absolute;
+  right: -1px; /* Positioned to the right of the battery */
+  width: 2px;
+  height: 6px;
+  background: darkgrey;
+  border-radius: 0 3px 3px 0;
+  z-index: 1; /* Ensures it's above the battery container */
+}
+
+/* Adjust terminal position for each battery */
+.battery-column .battery:first-child + .battery-terminal {
+  top: 4px; /* Original position for the first battery */
+}
+
+.battery-column .battery:nth-child(3) + .battery-terminal {
+  top: 48px; /* Original position for the second battery */
+}
+
+
 a {
   border: none;
   padding: 1.5em;
@@ -119,6 +201,9 @@ a:visited {
 
 a:hover {
   text-decoration: none;
+  background-color: #965e10;
+  color: Gainsboro;
+  cursor: pointer;
 }
 
 a:active {
@@ -128,13 +213,6 @@ a:active {
 .icon {
   width: 2em;
   padding-right: 1em;
-}
-
-a:hover,
-#active {
-  background-color: #007aff;
-  color: Gainsboro;
-  cursor: pointer;
 }
 
 .overlay {
@@ -166,13 +244,14 @@ a:hover,
 .container {
   display: grid;
   grid-gap: 10px;
-  height: calc(95vh - 56px);
+  height: 95vh;
   padding-top: 2.5vh;
   padding-bottom: 2.5vh;
   margin: 0 auto;
   background-color: #e5eaeb;
   position: relative;
   z-index: -99;
+   overflow: hidden;
 }
 
 .div {
@@ -192,6 +271,7 @@ a:hover,
   display: block;
   margin: 0 auto;
   align-self: center;
+  z-index: 99;
 }
 
 .image-container {
@@ -211,3 +291,40 @@ a:hover,
   z-index: 1;
   filter: drop-shadow(2px 2px 2px #0d2120);
 }
+
+.submenu-parent {
+      cursor: pointer;
+    }
+
+    .sub-menu {
+      display: none;
+      /* Hidden by default */
+      background-color: #1a1a1a;
+      /* Same as dropdown */
+      /* Add more styles if needed */
+    }
+
+    .sub-menu a {
+      padding: 1em;
+      font-size: 0.8em;
+      /* Smaller text */
+      font-weight: normal;
+      /* Not bold */
+      color: #b0b0b0;
+      /* Slightly darker */
+      text-decoration: none;
+      display: block;
+      background-color: #292929;
+      border-bottom: 1px solid #1a1a1a;
+      border-left: 1px solid #1a1a1a;
+    }
+
+    .sub-menu a:hover {
+      background-color: #007aff;
+      color: Gainsboro;
+    }
+
+    .sub-menu.show {
+      display: block;
+      /* Make the submenu visible */
+    }

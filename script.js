@@ -25,3 +25,26 @@ window.addEventListener("load", function () {
   dropdown.classList.add("show");
   overlay.classList.add("show");
 });
+document.addEventListener('DOMContentLoaded', function() {
+    var submenuTriggers = document.querySelectorAll('.submenu-parent');
+
+    submenuTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+            // Toggle the corresponding submenu
+            var submenu = this.nextElementSibling;
+            if (submenu && submenu.classList.contains('sub-menu')) {
+                submenu.classList.toggle('show');
+            }
+
+            // Optional: close other submenus when one is opened
+            submenuTriggers.forEach(function(otherTrigger) {
+                if (otherTrigger !== trigger) {
+                    var otherSubmenu = otherTrigger.nextElementSibling;
+                    if (otherSubmenu && otherSubmenu.classList.contains('sub-menu')) {
+                        otherSubmenu.classList.remove('show');
+                    }
+                }
+            });
+        });
+    });
+});
